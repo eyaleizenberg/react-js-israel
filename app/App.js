@@ -22,15 +22,6 @@ var App = React.createClass({
             style={styles.navBar}
           />
         }
-        configureScene={ (route) => {
-            if (route.sceneConfig) {
-              route.sceneConfig
-            }
-            else {
-              Navigator.SceneConfigs.HorizontalSwipeJump
-            }
-          }
-        }
       />
     );
   },
