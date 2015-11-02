@@ -26,10 +26,6 @@ var EventsList = React.createClass({
     if (this.state.loaded) {
       return(
         <View style={styles.container}>
-          <ListView
-            dataSource={this.state.dataSource}
-            renderRow={(rowData) => this.renderRow(rowData)}
-          />
         </View>
       );
     }
@@ -47,12 +43,6 @@ var EventsList = React.createClass({
       dataSource: this.state.dataSource.cloneWithRows(EventsStore.getEvents()),
       loaded: true
     });
-  },
-
-  renderRow(row) {
-    return(
-      <Text>{row.name}</Text>
-    );
   }
 });
 
