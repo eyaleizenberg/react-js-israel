@@ -1,8 +1,10 @@
 'use strict';
 
 var React = require('react-native');
-var EventsStore = require('../stores/events_store')
-var EventsActions = require('../actions/events_actions')
+var EventsStore = require('../stores/events_store');
+var EventsActions = require('../actions/events_actions');
+var EventRow = require('./event_row');
+var EventInfo = require('./event_info');
 var { StyleSheet, View, Text, ListView } = React;
 
 var EventsList = React.createClass({
@@ -22,13 +24,20 @@ var EventsList = React.createClass({
     EventsStore.removeEventsReceivedListener(this.addEvents);
   },
 
+  addEvents() {
+    this.setState({
+      dataSource: this.state.dataSource.cloneWithRows(EventsStore.getEvents()),
+      loaded: true
+    });
+  },
+
   render() {
     if (this.state.loaded) {
       return(
         <View style={styles.container}>
           <ListView
             dataSource={this.state.dataSource}
-            renderRow={(rowData) => this.renderRow(rowData)}
+            renderRow={this._renderRow}
           />
         </View>
       );
@@ -42,17 +51,22 @@ var EventsList = React.createClass({
     }
   },
 
-  addEvents() {
-    this.setState({
-      dataSource: this.state.dataSource.cloneWithRows(EventsStore.getEvents()),
-      loaded: true
-    });
+  _renderRow(event, sectionId, rowId) {
+    return(
+      <EventRow event={event} onPress={this.navigateToEvent} eventNumber={this.getEventNumber(rowId)} />
+    );
   },
 
-  renderRow(row) {
-    return(
-      <Text>{row.name}</Text>
-    );
+  getEventNumber(rowId) {
+    return this.state.dataSource._cachedRowCount - rowId;
+  },
+
+  navigateToEvent(event, eventNumber) {
+    this.props.navigator.push({
+      component: EventInfo,
+      title: "Meetup #" + eventNumber,
+      event: event
+    });
   }
 });
 

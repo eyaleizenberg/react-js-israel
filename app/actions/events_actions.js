@@ -6,7 +6,7 @@ var Routes = require('../modules/routes');
 var Api = require('../modules/api');
 
 var EventsActions = {
-  fetchEvents: function(routeName, opts, storeCollectionName) {
+  fetchEvents() {
     return Api.begin({
       path: Routes.eventsPath(),
       method: 'get',
